@@ -1,0 +1,28 @@
+export default {
+    // host: 'http://localhost:8080',
+    is_test: true,
+    host: 'http://api.chuangshi.nowui.com',
+    // is_test: false,
+    platform: 'H5',
+    version: '9.9.8',
+    name: '济颐馆',
+    h5Host: 'http://h5.jiyiguan.nowui.com/?#/',
+    app_id: 'df2078d6c9eb46babb0df957127273ab',
+    wechat_app_id: 'wx934f793803320ecd',
+    index: 'index',
+    menu: [{
+        key: 'index',
+        title: '首页',
+        url: '/index',
+        path: '/index',
+        icon: 'index.svg',
+        selected_icon: 'index_active.svg'
+    }, {
+        key: 'my',
+        title: '个人',
+        url: '/my',
+        path: '/my',
+        icon: 'my.svg',
+        selected_icon: 'my_active.svg'
+    }]
+};
