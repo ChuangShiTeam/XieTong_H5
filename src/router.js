@@ -8,16 +8,28 @@ import Password from './view/Password';
 import CourseIndex from './view/CourseIndex';
 import CourseDetail from './view/CourseDetail';
 
+import storage from "./util/storage";
 import constant from './util/constant';
 import notification from './util/notification';
 
 function RouterConfig({history}) {
 
     const handleEnter = function (next, replace, callback) {
+        if ((storage.getToken() === '' || storage.getToken() === null) && next.location.pathname !== '/login') {
+
+            replace('/login');
+        }
+
         callback();
     };
 
     const handleChange = function (next, replace, callback) {
+        console.log(storage.getToken())
+        if ((storage.getToken() === '' || storage.getToken() === null) && next.location.pathname !== '/login') {
+
+            replace('/login');
+        }
+
         notification.emit('notification_main_load', {
             path: replace.location.pathname
         });
