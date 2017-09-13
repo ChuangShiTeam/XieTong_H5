@@ -2,7 +2,6 @@ export default {
     namespace: 'index',
 
     state: {
-        course_list: [],
         scroll_top: 0,
     },
 

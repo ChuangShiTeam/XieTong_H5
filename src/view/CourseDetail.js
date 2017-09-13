@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal} from 'antd-mobile';
 
-import constant from '../util/constant';
+import validate from '../util/validate';
 import http from '../util/http';
 
 const alert = Modal.alert;
@@ -65,10 +65,16 @@ class CourseDetail extends Component {
 
         return (
             <div>
-                <NavBar leftContent="返回"
-                        mode="dark"
-                        onLeftClick={this.handleBack.bind(this)}
-                >课程详情</NavBar>
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <NavBar leftContent="返回"
+                                mode="dark"
+                                onLeftClick={this.handleBack.bind(this)}
+                        >课程详情</NavBar>
+
+                }
                 <WhiteSpace size="lg"/>
                 <List>
                     <Item>
