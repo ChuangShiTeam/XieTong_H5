@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
-import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal} from 'antd-mobile';
+import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal, Toast} from 'antd-mobile';
 
 import validate from '../util/validate';
 import http from '../util/http';
+import constant from '../util/constant';
 
 const alert = Modal.alert;
 
@@ -14,7 +15,7 @@ class CourseDetail extends Component {
 
         this.state = {
             is_load: false,
-            state: 0
+            course: {}
         }
     }
 
@@ -24,9 +25,10 @@ class CourseDetail extends Component {
         document.body.scrollTop = 0;
 
         this.setState({
-            is_load: true,
-            state: 3
+            is_load: true
         });
+
+        this.handleLoad();
     }
 
     componentWillUnmount() {
@@ -38,12 +40,67 @@ class CourseDetail extends Component {
         });
     }
 
+    handleLoad() {
+        Toast.loading('加载中..', 0);
+        
+        http.request({
+            url: '/mobile/xietong/course/find',
+            data: {
+                course_id: this.props.params.course_id
+            },
+            success: function (data) {
+                Toast.hide();
+                for (let i = 0; i < constant.course_time.length; i++) {
+                    if (data.course_time == constant.course_time[i].value) {
+                        data.course_time = constant.course_time[i].text;
+                        break
+                    }
+                }
+                this.setState({
+                    course: data
+                });
+            }.bind(this),
+            complete() {
+
+            },
+        });
+    }
+
     handleBack() {
         this.props.dispatch(routerRedux.goBack());
     }
 
     handleSubmit() {
+        http.request({
+            url: '/mobile/xietong/course/apply/save',
+            data: {
+                course_id: this.props.params.course_id
+            },
+            success: function (data) {
+                Toast.success('申请成功');
 
+                let list = this.props.index.list;
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].course_id == this.props.params.course_id) {
+                        list[i].is_apply = true;
+                    }
+                }
+
+                this.props.dispatch({
+                    type: 'index/fetch',
+                    data: {
+                        list: list
+                    }
+                });
+
+                setTimeout(function () {
+                    this.handleBack();
+                }.bind(this), constant.timeout * 300);
+            }.bind(this),
+            complete: function () {
+
+            }.bind(this)
+        });
     }
 
     handleCancel() {
@@ -52,9 +109,36 @@ class CourseDetail extends Component {
             {
                 text: '确定',
                 onPress: () => new Promise((resolve) => {
-                    resolve();
+                    http.request({
+                        url: '/mobile/xietong/course/apply/delete',
+                        data: {
+                            course_id: this.props.params.course_id
+                        },
+                        success: function (data) {
+                            Toast.success('取消成功');
 
+                            let list = this.props.index.list;
+                            for (let i = 0; i < list.length; i++) {
+                                if (list[i].course_id == this.props.params.course_id) {
+                                    list[i].is_apply = false;
+                                }
+                            }
 
+                            this.props.dispatch({
+                                type: 'index/fetch',
+                                data: {
+                                    list: list
+                                }
+                            });
+
+                            setTimeout(function () {
+                                this.handleBack();
+                            }.bind(this), constant.timeout * 300);
+                        }.bind(this),
+                        complete: function () {
+                            resolve();
+                        }.bind(this)
+                    });
                 }),
             },
         ])
@@ -62,6 +146,18 @@ class CourseDetail extends Component {
 
     render() {
         const Item = List.Item;
+
+        let status = 0;
+
+        if (this.state.course.is_limit) {
+            status = 3;
+        } else {
+            if (this.state.course.is_apply) {
+                status = 2;
+            } else {
+                status = 1;
+            }
+        }
 
         return (
             <div>
@@ -78,21 +174,21 @@ class CourseDetail extends Component {
                 <WhiteSpace size="lg"/>
                 <List>
                     <Item>
-                        <span className="index-title">名称: </span>走进音乐艺术
+                        <span className="index-title">名称: </span>{this.state.course.course_name}
                     </Item>
                     <Item>
-                        <span className="index-title">时间: </span>星期二第八节
+                        <span className="index-title">时间: </span>{this.state.course.course_time}
                     </Item>
                     <Item>
-                        <span className="index-title">人数: </span>20
+                        <span className="index-title">人数: </span>{this.state.course.course_apply_limit}
                     </Item>
                     <Item>
                         <div className="index-title">地点: </div>
-                        <div className="index-name">上海 上海市 黄浦区 淮海中路街道 兴业路123号新天地新里7楼裸心社</div>
+                        <div className="index-name">{this.state.course.course_address}</div>
                     </Item>
                     <Item wrap>
                         <div className="index-title">介绍: </div>
-                        <div className="index-name">Multiple line，long text will wrap；Long Text Long Text Long Text Long Text Long Text Long Text</div>
+                        <div className="index-name">{this.state.course.course_content}</div>
                     </Item>
                 </List>
 
@@ -102,27 +198,29 @@ class CourseDetail extends Component {
 
                 <WingBlank size="lg">
                     {
-                        this.state.state === 1 ?
+                        status === 1 ?
                             <Button type="primary" onClick={this.handleSubmit.bind(this)}>立即申请</Button>
                             :
                             ''
 
                     }
                     {
-                        this.state.state === 2 ?
+                        status === 2 ?
                             <Button onClick={this.handleCancel.bind(this)}>取消申请</Button>
                             :
                             ''
 
                     }
                     {
-                        this.state.state === 3 ?
+                        status === 3 ?
                             <Button>该课程已经被别人申请完了</Button>
                             :
                             ''
 
                     }
                 </WingBlank>
+                <WhiteSpace size="lg"/>
+                <div style={{height: '100px'}}></div>
                 {
                     this.state.is_load ?
                         ''
@@ -136,4 +234,4 @@ class CourseDetail extends Component {
     }
 }
 
-export default connect(({}) => ({}))(CourseDetail);
+export default connect(({index}) => ({index}))(CourseDetail);

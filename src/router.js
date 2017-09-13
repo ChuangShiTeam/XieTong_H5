@@ -47,7 +47,7 @@ function RouterConfig({history}) {
                 <Route path="/login" component={Login}/>
                 <Route path="/password" component={Password}/>
                 <Route path="/course/index" component={CourseIndex}/>
-                <Route path="/course/detail" component={CourseDetail}/>
+                <Route path="/course/detail/:course_id" component={CourseDetail}/>
             </Route>
         </Router>
     );

@@ -41,7 +41,7 @@ class Login extends Component {
                     data: values,
                     success: function (data) {
                         Toast.hide();
-                        
+
                         storage.setToken(data.token);
                         storage.setStudentName(data.student_name);
                         storage.setClazzName(data.clazz_name);
@@ -52,9 +52,9 @@ class Login extends Component {
                             }));
                         }.bind(this), 500);
                     }.bind(this),
-                    complete() {
-
-                    },
+                    complete: function () {
+                        
+                    }.bind(this)
                 });
             }
         });

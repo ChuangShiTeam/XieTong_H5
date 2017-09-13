@@ -104,7 +104,7 @@ class My extends Component {
                         thumb={require('../assets/svg/send.svg')} arrow="horizontal"
                         onClick={this.handleCourse.bind(this)}
                     >
-                        我的课程
+                        我的选课
                     </Item>
                     <Item
                         thumb={require('../assets/svg/lock.svg')} arrow="horizontal"

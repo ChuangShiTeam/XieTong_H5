@@ -3,6 +3,7 @@ export default {
 
     state: {
         scroll_top: 0,
+        list: []
     },
 
     reducers: {
