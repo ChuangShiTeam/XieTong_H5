@@ -7,7 +7,7 @@ import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, InputItem, Butto
 import validate from '../util/validate';
 import http from '../util/http';
 
-class Login extends Component {
+class Password extends Component {
     constructor(props) {
         super(props);
 
@@ -17,7 +17,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        document.title = '选课系统';
+        document.title = '重置密码';
 
         document.body.scrollTop = 0;
 
@@ -28,6 +28,10 @@ class Login extends Component {
 
     componentWillUnmount() {
 
+    }
+
+    handleBack() {
+        this.props.dispatch(routerRedux.goBack());
     }
 
     handleSubmit() {
@@ -59,23 +63,18 @@ class Login extends Component {
 
         return (
             <div>
-                <NavBar iconName=""
-                        mode="dark"
-                >选课系统</NavBar>
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <NavBar leftContent="返回"
+                                mode="dark"
+                                onLeftClick={this.handleBack.bind(this)}
+                        >重置密码</NavBar>
+
+                }
                 <WhiteSpace size="lg"/>
                 <List>
-                    <InputItem
-                        {...getFieldProps('user_account', {
-                            rules: [{
-                                required: true,
-                                message: '请输入学号',
-                            }],
-                            initialValue: '',
-                        })}
-                        error={!!getFieldError('user_account')}
-                        clear
-                        placeholder="请输入学号"
-                    >学号:</InputItem>
                     <InputItem
                         {...getFieldProps('user_password', {
                             rules: [{
@@ -88,6 +87,18 @@ class Login extends Component {
                         clear
                         placeholder="请输入密码"
                     >密码:</InputItem>
+                    <InputItem
+                        {...getFieldProps('user_password_2', {
+                            rules: [{
+                                required: true,
+                                message: '请输入确认密码',
+                            }],
+                            initialValue: '',
+                        })}
+                        error={!!getFieldError('user_password_2')}
+                        clear
+                        placeholder="请输入确认密码"
+                    >确认密码:</InputItem>
                 </List>
 
                 <WhiteSpace size="lg"/>
@@ -95,7 +106,7 @@ class Login extends Component {
                 <WhiteSpace size="lg"/>
 
                 <WingBlank size="lg">
-                    <Button type="primary" onClick={this.handleSubmit.bind(this)}>登录系统</Button>
+                    <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
                 </WingBlank>
                 {
                     this.state.is_load ?
@@ -110,6 +121,6 @@ class Login extends Component {
     }
 }
 
-Login = createForm()(Login);
+Password = createForm()(Password);
 
-export default connect(({}) => ({}))(Login);
+export default connect(({}) => ({}))(Password);

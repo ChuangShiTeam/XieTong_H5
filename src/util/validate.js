@@ -20,8 +20,18 @@ function isEmail(str) {
     }
 }
 
+function isWeChat() {
+    var ua = window.navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 export default {
     isUndefined: isUndefined,
     isMobile: isMobile,
-    isEmail: isEmail
+    isEmail: isEmail,
+    isWeChat: isWeChat
 };

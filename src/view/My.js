@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal} from 'antd-mobile';
 
-import constant from '../util/constant';
+import validate from '../util/validate';
 import http from '../util/http';
 
 const alert = Modal.alert;
@@ -39,7 +39,10 @@ class My extends Component {
     }
 
     handlePassword() {
-
+        this.props.dispatch(routerRedux.push({
+            pathname: '/password',
+            query: {}
+        }));
     }
 
     handleLogout() {
@@ -65,9 +68,15 @@ class My extends Component {
 
         return (
             <div>
-                <NavBar iconName=""
-                        mode="dark"
-                >个人中心</NavBar>
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <NavBar iconName=""
+                                mode="dark"
+                        >个人中心</NavBar>
+
+                }
                 <WhiteSpace size="lg"/>
                 <List>
                     <Item multipleLine
@@ -88,7 +97,7 @@ class My extends Component {
                     </Item>
                     <Item
                         thumb={require('../assets/svg/lock.svg')} arrow="horizontal"
-                        onClick={this.handleCourse.bind(this)}
+                        onClick={this.handlePassword.bind(this)}
                     >
                         重置密码
                     </Item>

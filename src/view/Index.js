@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import {ActivityIndicator, NavBar, WhiteSpace, List} from 'antd-mobile';
 
-import constant from '../util/constant';
+import validate from '../util/validate';
 import http from '../util/http';
 
 class Index extends Component {
@@ -11,7 +11,8 @@ class Index extends Component {
         super(props);
 
         this.state = {
-            is_load: false
+            is_load: false,
+            list: []
         }
     }
 
@@ -34,45 +35,74 @@ class Index extends Component {
         });
     }
 
+    handleCourse() {
+        this.props.dispatch(routerRedux.push({
+            pathname: '/course/detail',
+            query: {}
+        }));
+    }
+
     render() {
         const Item = List.Item;
 
         return (
             <div>
-                <NavBar iconName=""
-                        mode="dark"
-                >课程列表</NavBar>
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <NavBar iconName=""
+                                mode="dark"
+                        >课程列表</NavBar>
+
+                }
                 <WhiteSpace size="lg"/>
-                <List>
-                    <Item arrow="horizontal"
-                          multipleLine
-                          extra="已申请"
-                    >
+                {
+                    this.state.list.length > 0 ?
+                        <List>
+                            <Item arrow="horizontal"
+                                  multipleLine
+                                  extra="已申请"
+                                  onClick={this.handleCourse.bind(this)}
+                            >
+                                <div>
+                                    <span className="index-title">课程: </span>走进音乐艺术
+                                </div>
+                                <div>
+                                    <span className="index-title">时间: </span>星期二第八节
+                                </div>
+                                <div>
+                                    <span className="index-title">人数: </span>20
+                                </div>
+                            </Item>
+                            <Item arrow="horizontal"
+                                  multipleLine
+                                  extra="已申请"
+                                  onClick={this.handleCourse.bind(this)}
+                            >
+                                <div>
+                                    <span className="index-title">课程: </span>走进音乐艺术
+                                </div>
+                                <div>
+                                    <span className="index-title">时间: </span>星期二第八节
+                                </div>
+                                <div>
+                                    <span className="index-title">人数: </span>20
+                                </div>
+                            </Item>
+                        </List>
+                        :
+                        ''
+                }
+                {
+                    this.state.is_load && this.state.list.length === 0 ?
                         <div>
-                            <span className="index-title">课程: </span>走进音乐艺术
+                            <img src={require('../assets/svg/empty.svg')} className="empty-image" alt=""/>
+                            <div className="empty-text">没有数据</div>
                         </div>
-                        <div>
-                            <span className="index-title">时间: </span>星期二第八节
-                        </div>
-                        <div>
-                            <span className="index-title">人数: </span>20
-                        </div>
-                    </Item>
-                    <Item arrow="horizontal"
-                          multipleLine
-                          extra="已申请"
-                    >
-                        <div>
-                            <span className="index-title">课程: </span>走进音乐艺术
-                        </div>
-                        <div>
-                            <span className="index-title">时间: </span>星期二第八节
-                        </div>
-                        <div>
-                            <span className="index-title">人数: </span>20
-                        </div>
-                    </Item>
-                </List>
+                        :
+                        ''
+                }
                 {
                     this.state.is_load ?
                         ''

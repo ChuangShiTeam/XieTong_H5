@@ -4,6 +4,7 @@ import Main from './view/Main';
 import Index from './view/Index';
 import My from './view/My';
 import Login from './view/Login';
+import Password from './view/Password';
 import CourseIndex from './view/CourseIndex';
 import CourseDetail from './view/CourseDetail';
 
@@ -33,6 +34,7 @@ function RouterConfig({history}) {
                     <Route path="/my" component={My}/>
                 </Route>
                 <Route path="/login" component={Login}/>
+                <Route path="/password" component={Password}/>
                 <Route path="/course/index" component={CourseIndex}/>
                 <Route path="/course/detail" component={CourseDetail}/>
             </Route>
