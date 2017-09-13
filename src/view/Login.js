@@ -44,15 +44,20 @@ class Login extends Component {
                 Toast.loading('加载中..', 0);
 
                 http.request({
-                    url: '/mobile/student/login',
+                    url: '/mobile/xietong/student/login',
                     data: values,
                     success: function (data) {
                         Toast.hide();
 
-                        this.props.dispatch(routerRedux.push({
-                            pathname: '/index',
-                            query: {}
-                        }));
+                        storage.setToken(data.token);
+                        storage.setStudentName(data.student_name);
+                        storage.setClazzName(data.clazz_name);
+                        setTimeout(function () {
+                            this.props.dispatch(routerRedux.push({
+                                pathname: '/index',
+                                query: {}
+                            }));
+                        }.bind(this), 500);
                     }.bind(this),
                     complete() {
 

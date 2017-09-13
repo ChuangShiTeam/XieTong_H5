@@ -1,54 +1,11 @@
 import constant from './constant';
 
-const open_id_key = 'open_id_' + constant.version;
 const token_key = 'token_' + constant.version;
-const product_sku_list_key = 'product_sku_list_' + constant.version;
-const cart_key = 'cart_' + constant.version;
-const member_address_key = 'member_address_' + constant.version;
-const trade_flow_key = 'trade_flow_' + constant.version;
-const member_purchase_order_flow_key = 'member_purchase_order_flow_' + constant.version;
-const member_delivery_order_flow_key = 'member_delivery_order_flow_' + constant.version;
-
-function getOpenId() {
-    if (constant.is_test) {
-        if (constant.app_id === 'c1af3f1ae00e4e0da9b20f5bd41b4279') {
-            return 'oqvzXv4c-FY2-cGh9U-RA4JIrZoc';
-        } else {
-            return 'oXxTjwoBVyBquUAAx3RaFow62zjA';
-        }
-    }
-    return localStorage.getItem(open_id_key);
-}
-
-function setOpenId(open_id) {
-    localStorage.setItem(open_id_key, open_id);
-}
+const student_name_key = 'student_name_' + constant.version;
+const clazz_name_key = 'clazz_name_' + constant.version;
 
 function getToken() {
     let token = localStorage.getItem(token_key);
-
-    if (constant.is_test) {
-        if (constant.app_id === 'c1af3f1ae00e4e0da9b20f5bd41b4279') {
-            // token = 'gygLszl85cPD1c1AlprNZ/yZdlQtt3pF+BdCDPMzM9fPGHmzIsQ6dIzlS2wsn8lJfebepk0PIxJGZXWWcSiCPRE3uCVSOrsqQynDzzuuCH8=';
-            // token = 'jrm+riL6g6CN+wYxFfeuOqof7FRyU9UPU9BupigvBENYS+cAJweOLwOKsfC3NtrA/0yKhg3ARlxntdZeK6jJcYslLxfUHluhCWZPXozYBLc=';
-            // token = '8sJgFZkMMgLUPfF9dvJB0kqou5YYz7OBpHBnSIz7y/fMLJQYUAbBFzXE9GlYFHOo/0yKhg3ARlxntdZeK6jJcReT7cqlJ1bmRxZ56PFGm7s=';
-            // token = 'nFxzCTlV1fxElyp3FIozxYrXQzjt2PDgdsL9TyOf2eLAQbXeWTjoS1ssJaGnGm9L/0yKhg3ARlxntdZeK6jJcXuOgWQ+lxYFgxubIzOMbpo=';
-            // token = 'RWzhq4xTwjksOwclm+nOg6dp3n/8mCbZ9c7OolUXYaYLkIec0V6ZXZrV2Izavob1febepk0PIxJGZXWWcSiCPfXeh4XW7B3fYM10OdcyYkQ=';
-            // token = 'Py/GFsyNdHVuLPSXgmHtvW4yScYlgT0f7idl0PPTC3CUTsuGQsiVBzbV5G4sEgOCKtEuDb5qbUHFuI3SOyq8hAGiEFe8C+e8mviebHJgfWI=';
-            // token = 'KQcW4/AnvfpjgNWWAeYfG8ENfiadTcC9P6qYKVNXilVJwwafaHodFtvadr2OkXsaKtEuDb5qbUHFuI3SOyq8hMp1yQ0m2WE0SuAJKmzIuQk=';
-            // token = 'MiLWWS++tIWN5zCF253Ho8pDx6c39/KMTYuKJQeV7VndoFVSqq+Ou0czrhKu2ObhKtEuDb5qbUHFuI3SOyq8hLhIWUilDjJTo0v9rOnobCg=';
-            // token = '5fHp/RdSwmIPZA4T6iKFXCpZM4oNxfNTeE/O7t3tfYbfCpYQ62pPDnSPA9IdHBhNKtEuDb5qbUHFuI3SOyq8hM0BIWnFH+F8W+PjWWV5vDI=';
-            token = '8sJgFZkMMgLUPfF9dvJB0kqou5YYz7OBpHBnSIz7y/fMLJQYUAbBFzXE9GlYFHOo/0yKhg3ARlxntdZeK6jJcReT7cqlJ1bmRxZ56PFGm7s=';
-        } else {
-            // token = 'eGxQXLg8tF6pnkrWKDZtQYx66pZZVT7coqSE1UnwrdFaSxYn7vSUK0gatjD0XDdAfebepk0PIxJGZXWWcSiCPTEW98BsEe3j8pce1qW012o=';
-            // token = 'EglfmyoSgHXR35+iLGQRZCplzzJlPGVSzoBIrlBSR0au3n2ga4z5NC3zl7rhN4Pafebepk0PIxJGZXWWcSiCPS0ZRoDJqbk6DTHKn+l/SWE=';
-            // token = 'qo/dW5e3iwB0g+CmSJdAgPzazkmeUyIF9UZxj3vu2B2OZI64/+qOkj63ggR0bA7Ffebepk0PIxJGZXWWcSiCPagrz+Ffgk1F3MSEhHHrcFg=';
-            // token = 'lix+goOvFaVxAyzwvo4jwz9eEYXlr6wKOpZuYHcxuGPMCxBwXL8VIEpDgZxhfvrQfebepk0PIxJGZXWWcSiCPbSf6zzJ7AE8kk6PS8VEqqU=';
-            // token = 'azG3VW20EKR3+bgOJMZYizsKkMqA10GJJmdQRPrJYwGMZAqeRdBL0aMVabZy2sCHfebepk0PIxJGZXWWcSiCPeNGSMqVl1UlPVa6H9vbSts=';
-            // token = 'ujZ5LbWo3CcDW2Nzzf4W/WZnhV4dWs7WtVS2L4M8HRQnhKI+ZS2+xx22K9PzVfA1ciyFtzYixml/u7aG6UXOXMO9f82dyOMp5y5webx7i2c=';
-            token = 'RY9uCUt1RlOAUyKn7ZyttOlaamJyedDJ2yY18ReyqG0y8jHLHq1B2bi4KHH+nOH4d4S17fx0doHGAM9ekTj1OuHZFgPfeiygCwoZJYpLqkU=';
-        }
-    }
 
     if (token === null) {
         return '';
@@ -63,151 +20,39 @@ function setToken(token) {
     localStorage.setItem(token_key, token);
 }
 
-function getProductSkuList() {
-    let product_sku_list = localStorage.getItem(product_sku_list_key);
+function getStudentName() {
+    let student_name = localStorage.getItem(student_name_key);
 
-    if (product_sku_list === null) {
-        return [];
+    if (student_name === null) {
+        return '';
+    } else {
+        return student_name;
     }
-
-    return JSON.parse(product_sku_list);
 }
 
-function setProductSkuList(product_sku_list) {
-    localStorage.setItem(product_sku_list_key, JSON.stringify(product_sku_list));
+function setStudentName(student_name) {
+    localStorage.setItem(student_name_key, student_name);
 }
 
-function removeProductSkuList() {
-    localStorage.removeItem(product_sku_list_key);
-}
+function getClazzName() {
+    let clazz_name = localStorage.getItem(clazz_name_key);
 
-function getCart() {
-    var cart = localStorage.getItem(cart_key);
-
-    if (cart == null) {
-        return [];
+    if (clazz_name === null) {
+        return '';
+    } else {
+        return clazz_name;
     }
-
-    return JSON.parse(cart);
 }
 
-function setCart(cart) {
-    localStorage.setItem(cart_key, JSON.stringify(cart));
-}
-
-function addCart(product) {
-    var cartList = getCart();
-    var isNotExit = true;
-
-    for (var i = 0; i < cartList.length; i++) {
-        var cart = cartList[i];
-
-        if (cart.product_id === product.product_id) {
-            isNotExit = false;
-
-            cart.product_id = product.product_id;
-            cart.product_name = product.product_name;
-            cart.product_image = product.product_image;
-            cart.product_sku_id = product.product_sku_id;
-            cart.product_sku_price = product.product_sku_price;
-            cart.product_sku_quantity = product.product_sku_quantity + cart.product_sku_quantity;
-        }
-    }
-
-    if (isNotExit) {
-        cartList.push(product);
-    }
-
-    localStorage.setItem(cart_key, JSON.stringify(cartList));
-}
-
-function removeCart() {
-    localStorage.removeItem(cart_key);
-}
-
-function getMemberAddress() {
-    let member_address = localStorage.getItem(member_address_key);
-
-    if (member_address === null) {
-        return {
-            member_address_name: '',
-            member_address_mobile: '',
-            member_address_province: '',
-            member_address_city: '',
-            member_address_area: '',
-            member_address_address: ''
-        };
-    }
-
-    return JSON.parse(member_address);
-}
-
-function setMemberAddress(member_address) {
-    localStorage.setItem(member_address_key, JSON.stringify(member_address));
-}
-
-function removeMemberAddress() {
-    localStorage.removeItem(member_address_key);
-}
-
-function getTradeFlow() {
-    return JSON.parse(localStorage.getItem(trade_flow_key));
-}
-
-function setTradeFlow(trade_flow) {
-    localStorage.setItem(trade_flow_key, JSON.stringify(trade_flow));
-}
-
-function removeTradeFlow() {
-    localStorage.removeItem(trade_flow_key);
-}
-
-function getMemberPurchaseOrderFlow() {
-    return JSON.parse(localStorage.getItem(member_purchase_order_flow_key));
-}
-
-function setMemberPurchaseOrderFlow(member_purchase_order_flow) {
-    localStorage.setItem(member_purchase_order_flow_key, JSON.stringify(member_purchase_order_flow));
-}
-
-function removeMemberPurchaseOrderFlow() {
-    localStorage.removeItem(member_purchase_order_flow_key);
-}
-
-function getMemberDeliveryOrderFlow() {
-    return JSON.parse(localStorage.getItem(member_delivery_order_flow_key));
-}
-
-function setMemberDeliveryOrderFlow(member_delivery_order_flow) {
-    localStorage.setItem(member_delivery_order_flow_key, JSON.stringify(member_delivery_order_flow));
-}
-
-function removeMemberDeliveryOrderFlow() {
-    localStorage.removeItem(member_delivery_order_flow_key);
+function setClazzName(clazz_name) {
+    localStorage.setItem(clazz_name_key, clazz_name);
 }
 
 export default {
-    getOpenId: getOpenId,
-    setOpenId: setOpenId,
     getToken: getToken,
     setToken: setToken,
-    getProductSkuList: getProductSkuList,
-    setProductSkuList: setProductSkuList,
-    removeProductSkuList: removeProductSkuList,
-    getCart: getCart,
-    setCart: setCart,
-    addCart: addCart,
-    removeCart: removeCart,
-    getMemberAddress: getMemberAddress,
-    setMemberAddress: setMemberAddress,
-    removeMemberAddress: removeMemberAddress,
-    getTradeFlow: getTradeFlow,
-    setTradeFlow: setTradeFlow,
-    removeTradeFlow: removeTradeFlow,
-    getMemberPurchaseOrderFlow: getMemberPurchaseOrderFlow,
-    setMemberPurchaseOrderFlow: setMemberPurchaseOrderFlow,
-    removeMemberPurchaseOrderFlow: removeMemberPurchaseOrderFlow,
-    getMemberDeliveryOrderFlow: getMemberDeliveryOrderFlow,
-    setMemberDeliveryOrderFlow: setMemberDeliveryOrderFlow,
-    removeMemberDeliveryOrderFlow: removeMemberDeliveryOrderFlow
+    getStudentName: getStudentName,
+    setStudentName: setStudentName,
+    getClazzName: getClazzName,
+    setClazzName: setClazzName
 };

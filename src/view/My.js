@@ -88,7 +88,7 @@ class My extends Component {
                     </Item>
                     <Item
                         thumb={require('../assets/svg/lock.svg')} arrow="horizontal"
-                        onClick={this.handleCourse.bind(this)}
+                        onClick={this.handlePassword.bind(this)}
                     >
                         重置密码
                     </Item>
