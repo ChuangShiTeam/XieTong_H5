@@ -64,9 +64,15 @@ class Login extends Component {
 
         return (
             <div>
-                <NavBar iconName=""
-                        mode="dark"
-                >选课系统</NavBar>
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <NavBar iconName=""
+                                mode="dark"
+                        >选课系统</NavBar>
+
+                }
                 <WhiteSpace size="lg"/>
                 <List>
                     <InputItem
