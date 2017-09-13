@@ -6,6 +6,7 @@ import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, InputItem, Butto
 
 import validate from '../util/validate';
 import http from '../util/http';
+import storage from '../util/storage';
 
 class Login extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class Login extends Component {
                     data: values,
                     success: function (data) {
                         Toast.hide();
-
+                        
                         storage.setToken(data.token);
                         storage.setStudentName(data.student_name);
                         storage.setClazzName(data.clazz_name);
@@ -95,6 +96,7 @@ class Login extends Component {
                             }],
                             initialValue: '',
                         })}
+                        type="password"
                         error={!!getFieldError('user_password')}
                         clear
                         placeholder="请输入密码"

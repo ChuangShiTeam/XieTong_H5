@@ -15,7 +15,7 @@ import notification from './util/notification';
 function RouterConfig({history}) {
 
     const handleEnter = function (next, replace, callback) {
-        if ((storage.getToken() === '' || storage.getToken() === null) && next.location.pathname !== '/login') {
+        if ((storage.getToken() === '' || storage.getToken() === null || storage.getToken() === undefined) && next.location.pathname !== '/login') {
 
             replace('/login');
         }
@@ -24,7 +24,6 @@ function RouterConfig({history}) {
     };
 
     const handleChange = function (next, replace, callback) {
-        console.log(storage.getToken())
         if ((storage.getToken() === '' || storage.getToken() === null) && next.location.pathname !== '/login') {
 
             replace('/login');

@@ -5,6 +5,7 @@ import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal} f
 
 import validate from '../util/validate';
 import http from '../util/http';
+import storage from '../util/storage';
 
 const alert = Modal.alert;
 
@@ -65,6 +66,14 @@ class My extends Component {
     render() {
         const Item = List.Item;
         const Brief = Item.Brief;
+        let clazz_name = storage.getClazzName();
+        if (clazz_name) {
+            if (clazz_name.length === 3) {
+                clazz_name = clazz_name.substring(0, 1) + "年级" + parseInt(clazz_name.substring(1, 3)) + "班"
+            } else if (clazz_name.length === 4) {
+                clazz_name = clazz_name.substring(0, 2) + "年级" + parseInt(clazz_name.substring(2, 4)) + "班"
+            }
+        }
 
         return (
             <div>
@@ -83,8 +92,10 @@ class My extends Component {
                           thumb={<img src={require('../assets/image/logo.png')}
                                       style={{width: '100px', height: '100px'}}/>}
                     >
-                        钟永强
-                        <Brief>一年级一班</Brief>
+                        {storage.getStudentName()}
+                        <Brief>
+                            {clazz_name}
+                        </Brief>
                     </Item>
                 </List>
                 <WhiteSpace size="lg"/>

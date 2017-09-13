@@ -12,7 +12,8 @@ class Password extends Component {
         super(props);
 
         this.state = {
-            is_load: false
+            is_load: false,
+            confirmDirty: false
         }
     }
 
@@ -40,15 +41,12 @@ class Password extends Component {
                 Toast.loading('加载中..', 0);
 
                 http.request({
-                    url: '/mobile/student/login',
+                    url: '/mobile/xietong/student/password/update',
                     data: values,
                     success: function (data) {
                         Toast.hide();
 
-                        this.props.dispatch(routerRedux.push({
-                            pathname: '/index',
-                            query: {}
-                        }));
+                        this.handleBack();
                     }.bind(this),
                     complete() {
 
@@ -57,6 +55,27 @@ class Password extends Component {
             }
         });
     }
+
+    handleConfirmBlur(value) {
+        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    };
+
+    checkPassword = (rule, value, callback) => {
+        const form = this.props.form;
+        if (value && value !== form.getFieldValue('user_password')) {
+            callback('两次输入密码不一致!');
+        } else {
+            callback();
+        }
+    };
+
+    checkConfirm = (rule, value, callback) => {
+        const form = this.props.form;
+        if (value && this.state.confirmDirty) {
+            form.validateFields(['confirm_password'], { force: true });
+        }
+        callback();
+    };
 
     render() {
         const {getFieldProps, getFieldError} = this.props.form;
@@ -80,9 +99,12 @@ class Password extends Component {
                             rules: [{
                                 required: true,
                                 message: '请输入密码',
+                            }, {
+                                validator: this.checkConfirm
                             }],
                             initialValue: '',
                         })}
+                        type="password"
                         error={!!getFieldError('user_password')}
                         clear
                         placeholder="请输入密码"
@@ -92,9 +114,13 @@ class Password extends Component {
                             rules: [{
                                 required: true,
                                 message: '请输入确认密码',
+                            }, {
+                                validator: this.checkPassword
                             }],
                             initialValue: '',
                         })}
+                        type="password"
+                        onBlur={this.handleConfirmBlur.bind(this)}
                         error={!!getFieldError('user_password_2')}
                         clear
                         placeholder="请输入确认密码"
