@@ -2,8 +2,7 @@ export default {
     namespace: 'index',
 
     state: {
-        scroll_top: 0,
-        list: []
+        scroll_top: 0
     },
 
     reducers: {

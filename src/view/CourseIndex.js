@@ -12,18 +12,15 @@ class CourseIndex extends Component {
         super(props);
 
         this.state = {
-            is_load: false
+            is_load: false,
+            list: []
         }
     }
 
     componentDidMount() {
         document.title = '我的选课';
 
-        document.body.scrollTop = this.props.course.scroll_top;
-
-        this.setState({
-            is_load: true
-        });
+        document.documentElement.scrollTop = this.props.course.scroll_top;
 
         this.handleLoad();
     }
@@ -32,13 +29,12 @@ class CourseIndex extends Component {
         this.props.dispatch({
             type: 'course/fetch',
             data: {
-                scroll_top: document.body.scrollTop
+                scroll_top: document.documentElement.scrollTop
             },
         });
     }
 
     handleLoad() {
-        Toast.loading('加载中..', 0);
         http.request({
             url: '/mobile/xietong/course/apply/list',
             data: {
@@ -48,17 +44,16 @@ class CourseIndex extends Component {
                 Toast.hide();
                 for (let i = 0; i < data.length; i++) {
                     for (let j = 0; j < constant.course_time.length; j++) {
-                        if (data[i].course_time == constant.course_time[j].value) {
+                        if (data[i].course_time === constant.course_time[j].value) {
                             data[i].course_time = constant.course_time[j].text;
                             break
                         }
                     }
                 }
-                this.props.dispatch({
-                    type: 'course/fetch',
-                    data: {
-                        list: data
-                    }
+
+                this.setState({
+                    is_load: true,
+                    list: data
                 });
             }.bind(this),
             complete: function () {
@@ -87,16 +82,24 @@ class CourseIndex extends Component {
                     validate.isWeChat() ?
                         ''
                         :
-                        <NavBar leftContent="返回"
+                        <NavBar className="header"
+                                leftContent="返回"
                                 mode="dark"
                                 onLeftClick={this.handleBack.bind(this)}
                         >我的选课</NavBar>
 
                 }
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <div style={{height: '100px'}}></div>
+
+                }
                 <WhiteSpace size="lg"/>
                 {
-                    this.props.course.list.length > 0 ?
-                    this.props.course.list.map((item, index) => {
+                    this.state.list.length > 0 ?
+                    this.state.list.map((item, index) => {
                         return (
                             <List key={index}>
                                 <Item arrow="horizontal"
@@ -119,7 +122,7 @@ class CourseIndex extends Component {
                     }):''
                 }
                 {
-                    this.state.is_load && this.props.course.list.length === 0 ?
+                    this.state.is_load && this.state.list.length === 0 ?
                         <div>
                             <img src={require('../assets/svg/empty.svg')} className="empty-image" alt=""/>
                             <div className="empty-text">没有数据</div>

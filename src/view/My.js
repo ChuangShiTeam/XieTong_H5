@@ -4,7 +4,6 @@ import {routerRedux} from 'dva/router';
 import {ActivityIndicator, NavBar, WhiteSpace, WingBlank, List, Button, Modal} from 'antd-mobile';
 
 import validate from '../util/validate';
-import http from '../util/http';
 import storage from '../util/storage';
 
 const alert = Modal.alert;
@@ -21,11 +20,13 @@ class My extends Component {
     componentDidMount() {
         document.title = '个人中心';
 
-        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
 
-        this.setState({
-            is_load: true
-        });
+        setTimeout(function () {
+            this.setState({
+                is_load: true
+            });
+        }.bind(this), 150);
     }
 
     componentWillUnmount() {
@@ -48,7 +49,7 @@ class My extends Component {
 
     handleLogout() {
         alert('退出系统', '退出后不会删除任何历史记录，下次登录依然可以使用本帐号。', [
-            {text: '取消', onPress: () => console.log('cancel')},
+            {text: '取消', onPress: () => {}},
             {
                 text: '确定',
                 onPress: () => new Promise((resolve) => {
@@ -81,9 +82,17 @@ class My extends Component {
                     validate.isWeChat() ?
                         ''
                         :
-                        <NavBar iconName=""
+                        <NavBar className="header"
+                                iconName=""
                                 mode="dark"
                         >个人中心</NavBar>
+
+                }
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <div style={{height: '100px'}}></div>
 
                 }
                 <WhiteSpace size="lg"/>

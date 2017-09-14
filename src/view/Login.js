@@ -18,9 +18,9 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        document.title = '选课系统';
+        document.title = '佛山协同国际学校选课平台';
 
-        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
 
         this.setState({
             is_load: true
@@ -40,17 +40,18 @@ class Login extends Component {
                     url: '/mobile/xietong/student/login',
                     data: values,
                     success: function (data) {
-                        Toast.hide();
+                        Toast.success('登录成功');
 
                         storage.setToken(data.token);
                         storage.setStudentName(data.student_name);
                         storage.setClazzName(data.clazz_name);
+
                         setTimeout(function () {
                             this.props.dispatch(routerRedux.push({
                                 pathname: '/index',
                                 query: {}
                             }));
-                        }.bind(this), 500);
+                        }.bind(this), 200);
                     }.bind(this),
                     complete: function () {
                         
@@ -69,9 +70,17 @@ class Login extends Component {
                     validate.isWeChat() ?
                         ''
                         :
-                        <NavBar iconName=""
+                        <NavBar className="header"
+                                iconName=""
                                 mode="dark"
-                        >选课系统</NavBar>
+                        >佛山协同国际学校选课系统</NavBar>
+
+                }
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <div style={{height: '100px'}}></div>
 
                 }
                 <WhiteSpace size="lg"/>

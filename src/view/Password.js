@@ -20,11 +20,13 @@ class Password extends Component {
     componentDidMount() {
         document.title = '重置密码';
 
-        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
 
-        this.setState({
-            is_load: true
-        });
+        setTimeout(function () {
+            this.setState({
+                is_load: true
+            });
+        }.bind(this), 150);
     }
 
     componentWillUnmount() {
@@ -86,10 +88,18 @@ class Password extends Component {
                     validate.isWeChat() ?
                         ''
                         :
-                        <NavBar leftContent="返回"
+                        <NavBar className="header"
+                                leftContent="返回"
                                 mode="dark"
                                 onLeftClick={this.handleBack.bind(this)}
                         >重置密码</NavBar>
+
+                }
+                {
+                    validate.isWeChat() ?
+                        ''
+                        :
+                        <div style={{height: '100px'}}></div>
 
                 }
                 <WhiteSpace size="lg"/>
