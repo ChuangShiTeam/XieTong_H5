@@ -101,7 +101,9 @@ class CourseDetail extends Component {
                     is_submit: true
                 });
 
-                this.handleConfirm(data);
+                setTimeout(() => {
+                    this.handleConfirm(data);
+                }, 1000);
             }.bind(this),
             complete: function () {
 
@@ -123,14 +125,14 @@ class CourseDetail extends Component {
                         course_apply_history_status: 'SUCCESS'
                     });
                 } else if (data.course_apply_history_status === 'WAITING') {
-                    if (this.state.confirm_count < 20) {
+                    if (this.state.confirm_count < 15) {
                         this.setState({
                             confirm_count: this.state.confirm_count + 1
                         });
 
                         setTimeout(() => {
                             this.handleConfirm(course_apply_history_id);
-                        }, 1500);
+                        }, 1000);
                     } else {
                         this.setState({
                             course_apply_history_status: 'FAIL',

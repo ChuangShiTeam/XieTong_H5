@@ -56,6 +56,10 @@ class My extends Component {
                 onPress: () => new Promise((resolve) => {
                     resolve();
 
+                    storage.setToken('');
+                    storage.setStudentName('');
+                    storage.setClazzName('');
+
                     this.props.dispatch(routerRedux.push({
                         pathname: '/login',
                         query: {}
