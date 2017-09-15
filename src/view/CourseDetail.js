@@ -103,7 +103,7 @@ class CourseDetail extends Component {
 
                 setTimeout(() => {
                     this.handleConfirm(data);
-                }, 1000);
+                }, 500);
             }.bind(this),
             complete: function () {
 
@@ -118,32 +118,34 @@ class CourseDetail extends Component {
                 course_apply_history_id: course_apply_history_id
             },
             success: function (data) {
-                if (data.course_apply_history_status === 'SUCCESS') {
-
-
-                    this.setState({
-                        course_apply_history_status: 'SUCCESS'
-                    });
-                } else if (data.course_apply_history_status === 'WAITING') {
-                    if (this.state.confirm_count < 15) {
+                if (data) {
+                    if (data.course_apply_history_status === 'SUCCESS') {
                         this.setState({
-                            confirm_count: this.state.confirm_count + 1
+                            course_apply_history_status: 'SUCCESS'
                         });
+                    } else if (data.course_apply_history_status === 'WAITING') {
 
-                        setTimeout(() => {
-                            this.handleConfirm(course_apply_history_id);
-                        }, 1000);
                     } else {
                         this.setState({
                             course_apply_history_status: 'FAIL',
-                            course_apply_history_result: '网络缓慢,请刷新再尝试'
+                            course_apply_history_result: data.course_apply_history_result
                         });
                     }
                 } else {
-                    this.setState({
-                        course_apply_history_status: 'FAIL',
-                        course_apply_history_result: data.course_apply_history_result
-                    });
+                    // if (this.state.confirm_count < 20) {
+                    //     this.setState({
+                    //         confirm_count: this.state.confirm_count + 1
+                    //     });
+                    //
+                    //     setTimeout(() => {
+                    //         this.handleConfirm(course_apply_history_id);
+                    //     }, 500);
+                    // } else {
+                    //     this.setState({
+                    //         course_apply_history_status: 'FAIL',
+                    //         course_apply_history_result: '网络缓慢,请刷新再尝试'
+                    //     });
+                    // }
                 }
             }.bind(this),
             complete() {
@@ -313,7 +315,7 @@ class CourseDetail extends Component {
                     this.state.is_submit && this.state.course_apply_history_status === 'WAITING' ?
                         <Result
                             img={<img src={require('../assets/svg/waiting.svg')} style={{ width: '1.2rem', height: '1.2rem' }} alt=""/>}
-                            title="平台处理"
+                            title="平台处理中"
                             message="已提交申请，等待平台处理"
                         />
                         :

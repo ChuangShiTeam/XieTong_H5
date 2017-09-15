@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
-import {ActivityIndicator, NavBar, WhiteSpace, List, Toast} from 'antd-mobile';
+import {ActivityIndicator, NavBar, WhiteSpace, List} from 'antd-mobile';
 
 import validate from '../util/validate';
 import http from '../util/http';
