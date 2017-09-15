@@ -32,8 +32,9 @@ class Index extends Component {
         if (scroll_top == 0) {
             scroll_top = document.body.scrollTop;
         }
+
         this.props.dispatch({
-            type: 'course/fetch',
+            type: 'index/fetch',
             data: {
                 scroll_top: scroll_top
             },
