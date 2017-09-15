@@ -63,8 +63,8 @@ class CourseIndex extends Component {
                 });
             }.bind(this),
             complete: function () {
-                document.documentElement.scrollTop = this.props.index.scroll_top;
-                document.body.scrollTop = this.props.index.scroll_top;
+                document.documentElement.scrollTop = this.props.course.scroll_top;
+                document.body.scrollTop = this.props.course.scroll_top;
             }.bind(this)
         });
     }
