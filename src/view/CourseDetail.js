@@ -132,20 +132,20 @@ class CourseDetail extends Component {
                         });
                     }
                 } else {
-                    // if (this.state.confirm_count < 20) {
-                    //     this.setState({
-                    //         confirm_count: this.state.confirm_count + 1
-                    //     });
-                    //
-                    //     setTimeout(() => {
-                    //         this.handleConfirm(course_apply_history_id);
-                    //     }, 500);
-                    // } else {
-                    //     this.setState({
-                    //         course_apply_history_status: 'FAIL',
-                    //         course_apply_history_result: '网络缓慢,请刷新再尝试'
-                    //     });
-                    // }
+                    if (this.state.confirm_count < 20) {
+                        this.setState({
+                            confirm_count: this.state.confirm_count + 1
+                        });
+
+                        setTimeout(() => {
+                            this.handleConfirm(course_apply_history_id);
+                        }, 500);
+                    } else {
+                        this.setState({
+                            course_apply_history_status: 'FAIL',
+                            course_apply_history_result: '网络缓慢,请刷新再尝试'
+                        });
+                    }
                 }
             }.bind(this),
             complete() {
