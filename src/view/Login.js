@@ -21,6 +21,7 @@ class Login extends Component {
         document.title = '佛山协同国际学校选课平台';
 
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
 
         this.setState({
             is_load: true

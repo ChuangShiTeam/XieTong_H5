@@ -21,6 +21,7 @@ class Password extends Component {
         document.title = '重置密码';
 
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
 
         setTimeout(function () {
             this.setState({

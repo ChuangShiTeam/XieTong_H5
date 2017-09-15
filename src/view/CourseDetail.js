@@ -27,6 +27,7 @@ class CourseDetail extends Component {
         document.title = '课程详情';
 
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
 
         this.handleLoad();
     }

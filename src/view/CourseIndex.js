@@ -20,16 +20,22 @@ class CourseIndex extends Component {
     componentDidMount() {
         document.title = '我的选课';
 
-        document.documentElement.scrollTop = this.props.course.scroll_top;
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
 
         this.handleLoad();
     }
 
     componentWillUnmount() {
+        var scroll_top = document.documentElement.scrollTop;
+
+        if (scroll_top == 0) {
+            scroll_top = document.body.scrollTop;
+        }
         this.props.dispatch({
             type: 'course/fetch',
             data: {
-                scroll_top: document.documentElement.scrollTop
+                scroll_top: scroll_top
             },
         });
     }
@@ -57,7 +63,8 @@ class CourseIndex extends Component {
                 });
             }.bind(this),
             complete: function () {
-
+                document.documentElement.scrollTop = this.props.index.scroll_top;
+                document.body.scrollTop = this.props.index.scroll_top;
             }.bind(this)
         });
     }

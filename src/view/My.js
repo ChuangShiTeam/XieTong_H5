@@ -21,6 +21,7 @@ class My extends Component {
         document.title = '个人中心';
 
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
 
         setTimeout(function () {
             this.setState({
