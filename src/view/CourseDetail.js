@@ -15,8 +15,11 @@ class CourseDetail extends Component {
 
         this.state = {
             is_load: false,
-            is_submit: true,
-            course: {}
+            is_submit: false,
+            course: {},
+            confirm_count: 0,
+            course_apply_history_status: 'WAITING',
+            course_apply_history_result: ''
         }
     }
 
@@ -62,31 +65,42 @@ class CourseDetail extends Component {
     }
 
     handleSubmit() {
+        Toast.loading('加载中..', 0);
+
         http.request({
-            url: '/mobile/xietong/course/apply',
+            url: '/mobile/xietong/course/apply/save',
             data: {
                 course_id: this.props.params.course_id
             },
             success: function (data) {
-                Toast.success('申请成功');
+                // Toast.success('申请成功');
+                //
+                // let list = this.props.index.list;
+                // for (let i = 0; i < list.length; i++) {
+                //     if (list[i].course_id === this.props.params.course_id) {
+                //         list[i].is_apply = true;
+                //     }
+                // }
+                //
+                // this.props.dispatch({
+                //     type: 'index/fetch',
+                //     data: {
+                //         list: list
+                //     }
+                // });
+                //
+                // setTimeout(function () {
+                //     this.handleBack();
+                // }.bind(this), constant.timeout * 300);
 
-                let list = this.props.index.list;
-                for (let i = 0; i < list.length; i++) {
-                    if (list[i].course_id === this.props.params.course_id) {
-                        list[i].is_apply = true;
-                    }
-                }
 
-                this.props.dispatch({
-                    type: 'index/fetch',
-                    data: {
-                        list: list
-                    }
+                Toast.hide();
+
+                this.setState({
+                    is_submit: true
                 });
 
-                setTimeout(function () {
-                    this.handleBack();
-                }.bind(this), constant.timeout * 300);
+                this.handleConfirm(data);
             }.bind(this),
             complete: function () {
 
@@ -94,37 +108,67 @@ class CourseDetail extends Component {
         });
     }
 
+    handleConfirm(course_apply_history_id) {
+        http.request({
+            url: '/mobile/xietong/course/apply/history/find',
+            data: {
+                course_apply_history_id: course_apply_history_id
+            },
+            success: function (data) {
+                if (data.course_apply_history_status === 'SUCCESS') {
+
+
+                    this.setState({
+                        course_apply_history_status: 'SUCCESS'
+                    });
+                } else if (data.course_apply_history_status === 'WAITING') {
+                    if (this.state.confirm_count < 20) {
+                        this.setState({
+                            confirm_count: this.state.confirm_count + 1
+                        });
+
+                        setTimeout(() => {
+                            this.handleConfirm(course_apply_history_id);
+                        }, 1500);
+                    } else {
+                        this.setState({
+                            course_apply_history_status: 'FAIL',
+                            course_apply_history_result: '网络异常,请与平台工作人员确认'
+                        });
+                    }
+                } else {
+                    this.setState({
+                        course_apply_history_status: 'FAIL',
+                        course_apply_history_result: data.course_apply_history_result
+                    });
+                }
+            }.bind(this),
+            complete() {
+
+            },
+        });
+    }
+
     handleCancel() {
-        alert('取消课程', '将删除该门课程的选课记录。', [
+        alert('取消课程', '将取消该门课程的申请。', [
             {text: '取消', onPress: () => console.log('cancel')},
             {
                 text: '确定',
                 onPress: () => new Promise((resolve) => {
+                    Toast.loading('加载中..', 0);
+
                     http.request({
                         url: '/mobile/xietong/course/apply/delete',
                         data: {
                             course_id: this.props.params.course_id
                         },
                         success: function (data) {
-                            Toast.success('取消成功');
+                            Toast.hide();
 
-                            let list = this.props.index.list;
-                            for (let i = 0; i < list.length; i++) {
-                                if (list[i].course_id === this.props.params.course_id) {
-                                    list[i].is_apply = false;
-                                }
-                            }
-
-                            this.props.dispatch({
-                                type: 'index/fetch',
-                                data: {
-                                    list: list
-                                }
+                            this.setState({
+                                is_submit: true,
+                                course_apply_history_status: 'CANCEL',
                             });
-
-                            setTimeout(function () {
-                                this.handleBack();
-                            }.bind(this), constant.timeout * 300);
                         }.bind(this),
                         complete: function () {
                             resolve();
@@ -263,7 +307,7 @@ class CourseDetail extends Component {
                 }
 
                 {
-                    this.state.is_submit ?
+                    this.state.is_submit && this.state.course_apply_history_status === 'WAITING' ?
                         <Result
                             img={<img src={require('../assets/svg/waiting.svg')} style={{ width: '1.2rem', height: '1.2rem' }} alt=""/>}
                             title="平台处理"
@@ -274,21 +318,151 @@ class CourseDetail extends Component {
 
                 }
 
-                <Result
-                    img={<Icon
-                        type="check-circle"
-                        style={{ fill: '#1F90E6', width: '1.2rem', height: '1.2rem' }}
-                        alt=""
-                    />}
-                    title="选课成功"
-                    message="恭喜您选中了该门课程"
-                />
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'SUCCESS' ?
+                        <Result
+                            img={<Icon
+                                type="check-circle"
+                                style={{fill: '#1F90E6', width: '1.2rem', height: '1.2rem'}}
+                                alt=""
+                            />}
+                            title="选课成功"
+                            message="恭喜您选中了该门课程"
+                        />
+                        :
+                        ''
 
-                <Result
-                    img={<img src={require('../assets/svg/notice.svg')} style={{ width: '1.2rem', height: '1.2rem' }} alt=""/>}
-                    title="网络异常"
-                    message="请与平台工作人员确认"
-                />
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'SUCCESS' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'SUCCESS' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'SUCCESS' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'SUCCESS' ?
+                        <WingBlank size="lg">
+                            <Button type="primary" onClick={this.handleBack.bind(this)}>返回继续选课</Button>
+                        </WingBlank>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'FAIL' ?
+                        <Result
+                            img={<Icon type="cross-circle-o" className="icon" style={{fill: '#F13642', width: '1.2rem', height: '1.2rem'}} />}
+                            title="申请失败"
+                            message={this.state.course_apply_history_result}
+                        />
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'FAIL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'FAIL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'FAIL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'FAIL' ?
+                        <WingBlank size="lg">
+                            <Button type="primary" onClick={this.handleBack.bind(this)}>返回继续选课</Button>
+                        </WingBlank>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'CANCEL' ?
+                        <Result
+                            img={<Icon
+                                type="check-circle"
+                                style={{fill: '#1F90E6', width: '1.2rem', height: '1.2rem'}}
+                                alt=""
+                            />}
+                            title="取消成功"
+                            message="您已经取消了该门课程"
+                        />
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'CANCEL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'CANCEL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'CANCEL' ?
+                        <WhiteSpace size="lg"/>
+                        :
+                        ''
+
+                }
+
+                {
+                    this.state.is_submit && this.state.course_apply_history_status === 'CANCEL' ?
+                        <WingBlank size="lg">
+                            <Button type="primary" onClick={this.handleBack.bind(this)}>返回继续选课</Button>
+                        </WingBlank>
+                        :
+                        ''
+
+                }
 
                 {
                     this.state.is_submit ?

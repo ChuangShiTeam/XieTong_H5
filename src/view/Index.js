@@ -37,10 +37,9 @@ class Index extends Component {
             url: '/mobile/xietong/course/list',
             data: {},
             success: function (data) {
-                // Toast.hide();
                 for (let i = 0; i < data.length; i++) {
                     for (let j = 0; j < constant.course_time.length; j++) {
-                        if (data[i].course_time === constant.course_time[j].value) {
+                        if (data[i].course_time == constant.course_time[j].value) {
                             data[i].course_time = constant.course_time[j].text;
                             break
                         }
