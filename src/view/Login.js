@@ -52,7 +52,7 @@ class Login extends Component {
                                 pathname: '/index',
                                 query: {}
                             }));
-                        }.bind(this), 200);
+                        }.bind(this), 1000);
                     }.bind(this),
                     complete: function () {
                         

@@ -45,7 +45,7 @@ class CourseDetail extends Component {
             success: function (data) {
                 Toast.hide();
                 for (let i = 0; i < constant.course_time.length; i++) {
-                    if (data.course_time === constant.course_time[i].value) {
+                    if (data.course_time == constant.course_time[i].value) {
                         data.course_time = constant.course_time[i].text;
                         break
                     }
@@ -134,7 +134,7 @@ class CourseDetail extends Component {
                     } else {
                         this.setState({
                             course_apply_history_status: 'FAIL',
-                            course_apply_history_result: '网络异常,请与平台工作人员确认'
+                            course_apply_history_result: '网络缓慢,请刷新再尝试'
                         });
                     }
                 } else {
