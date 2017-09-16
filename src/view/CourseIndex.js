@@ -121,7 +121,7 @@ class CourseIndex extends Component {
                                         <span className="index-title">时间: </span>{item.course_time}
                                     </div>
                                     <div>
-                                        <span className="index-title">人数: </span>{item.course_apply_limit}
+                                        <span className="index-title">名额: </span>{item.course_apply_limit}
                                     </div>
                                 </Item>
                             </List>

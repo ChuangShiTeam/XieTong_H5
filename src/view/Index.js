@@ -114,7 +114,7 @@ class Index extends Component {
                                             <span className="index-title">时间: </span>{item.course_time}
                                         </div>
                                         <div>
-                                            <span className="index-title">人数: </span>{item.course_apply_limit}
+                                            <span className="index-title">名额: </span>{item.course_apply_limit}，<span className="index-title">剩余: </span><span className="index-extra">{item.course_apply_limit - item.course_apply_count < 0 ? 0 : item.course_apply_limit - item.course_apply_count}</span>
                                         </div>
                                     </Item>
                                 </List>
