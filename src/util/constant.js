@@ -35,11 +35,17 @@ export default {
         value: '28',
         text: '星期二第八节'
     }, {
+        value: '29',
+        text: '星期二第九节'
+    }, {
         value: '47',
         text: '星期四第七节'
     }, {
         value: '48',
         text: '星期四第八节'
+    }, {
+        value: '49',
+        text: '星期四第九节'
     }, {
         value: '56',
         text: '星期五第六节'
