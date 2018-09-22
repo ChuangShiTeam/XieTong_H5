@@ -12,7 +12,8 @@ function request(config) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'app_id': constant.app_id,
+			'app_id': constant.app_id,
+			'appid': constant.app_id,
             'token': storage.getToken(),
             'platform': constant.platform,
             'version': constant.version
