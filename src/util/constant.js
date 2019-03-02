@@ -4,7 +4,7 @@ export default {
     host: 'http://api.chuangshi.nowui.com',
     is_test: false,
     platform: 'H5',
-    version: '9.9.8',
+    version: '1.1.0',
     name: '协同',
     h5Host: 'http://h5.xietong.nowui.com/?#/',
     app_id: '749388e5dac3465f922c54e61d16a993',
